@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Flow {
+  id        String   @id @default(uuid())
+  name      String
+  nodes     Json
+  edges     Json
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  runs      Execution[]
+}
+
+model Execution {
+  id         String   @id @default(uuid())
+  flowId     String
+  status     String   @default("pending")
+  steps      Json     @default("[]")
+  input      Json?
+  output     Json?
+  error      String?
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+  duration   Int?
+  flow       Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId])
+  @@index([status])
+}
