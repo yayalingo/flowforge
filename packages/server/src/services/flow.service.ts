@@ -3,7 +3,7 @@ import { prisma } from '../db/prisma';
 
 export async function getAllFlows(): Promise<Flow[]> {
   const flows = await prisma.flow.findMany({ orderBy: { updatedAt: 'desc' } });
-  return flows.map((f) => ({
+  return flows.map((f: any) => ({
     ...f,
     nodes: f.nodes as any,
     edges: f.edges as any,

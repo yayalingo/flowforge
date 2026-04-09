@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable && pnpm install --frozen-lockfile
 COPY . .
+RUN pnpm install --frozen-lockfile --filter @flowforge/shared
 RUN pnpm --filter @flowforge/shared build
 RUN pnpm --filter @flowforge/web build
 
